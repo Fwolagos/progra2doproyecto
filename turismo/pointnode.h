@@ -14,6 +14,7 @@ private:
 	PointNode* next;
 	PointNode* prev;
 public:
+	PointNode();
 	PointNode(string, int, int);
 	~PointNode();
 

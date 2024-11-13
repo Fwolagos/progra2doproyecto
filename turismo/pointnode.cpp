@@ -1,6 +1,9 @@
 #include "pointnode.h"
 
-PointNode::~Point() {}
+PointNode::~PointNode() {}
+PointNode::PointNode() {
+
+}
 
  PointNode::PointNode(string name, int x, int y) {
     this->name = name;
