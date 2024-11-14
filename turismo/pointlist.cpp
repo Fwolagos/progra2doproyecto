@@ -40,10 +40,10 @@ void PointList::delPoint(PointNode* point) {
 	next->setPrev(prev);
 	delete point;
 }
-void editPointName(PointNode* point, string name) {
+void PointList::editPointName(PointNode* point, string name) {
 	point->setName(name);
 }
-void editPointPosition(PointNode* point, int position[2]) {
+void PointList::editPointPosition(PointNode* point, int position[2]) {
 	point->setX(position[0]);
 	point->setY(position[1]);
 }

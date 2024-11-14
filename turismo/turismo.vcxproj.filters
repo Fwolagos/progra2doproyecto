@@ -24,12 +24,18 @@
     <ClCompile Include="pointlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="routemanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pointnode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="pointlist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="routemanager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
