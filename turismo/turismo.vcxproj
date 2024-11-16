@@ -139,14 +139,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="button.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pointlist.cpp" />
     <ClCompile Include="pointnode.cpp" />
+    <ClCompile Include="route.cpp" />
     <ClCompile Include="routemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="button.h" />
     <ClInclude Include="pointlist.h" />
     <ClInclude Include="pointnode.h" />
+    <ClInclude Include="route.h" />
     <ClInclude Include="routemanager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
