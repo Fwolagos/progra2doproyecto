@@ -49,7 +49,23 @@ void PointList::editPointPosition(PointNode* point, int position[2]) {
 }
 
 
+void PointList::loadPoints(vector<sf::CircleShape>& circles, vector<sf::Vertex>& lines) {
+	PointNode* temp = head;
+	while (temp != nullptr) {
+		sf::CircleShape circle(RADIUS);
+		circle.setFillColor(COLOR_POINT);
+		circle.setPosition(temp->getX(), temp->getY());
+		circle.setOutlineColor(COLOR_OUTLINE);
+		circles.push_back(circle);
 
+		///lineas
+		lines.push_back(sf::Vertex(sf::Vector2f(temp->getX(), temp->getY()), COLOR_LINE));
+	
+
+
+		temp = temp->getNext();
+	}
+}
 
 
 
