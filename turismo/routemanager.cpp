@@ -1,5 +1,4 @@
 ﻿#include "routemanager.h"
-#define PATH "sources/"
 
 
 RouteManager::RouteManager() {
@@ -83,10 +82,10 @@ void RouteManager::menu(sf::RenderWindow& window) {
 
 
 void RouteManager::initialize() {
-	sf::RenderWindow window(sf::VideoMode(750, 649), "test");
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), NAME_WINDOW);
 
 	sf::Texture texture;
-	if (!texture.loadFromFile(PATH"img/CostaRica.jpg")) {
+	if (!texture.loadFromFile(BACKGROUND)) {
 		system("echo error imagen no cargada& pause");
 		return;
 	}

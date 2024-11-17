@@ -5,6 +5,9 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "route.h"
+#define BACKGROUND "sources/img/CostaRica.jpg"
+#define WINDOW_WIDTH 750
+#define WINDOW_HEIGHT 649
 using namespace std;
 
 
@@ -26,6 +29,6 @@ public:///Esto es lo unico publico
 	void ressetVectors();
 	bool ruouteexist(string);
 	Route& getRoute(string);
-	void drawRoute 
+	void drawRoute();
 };
 #endif
