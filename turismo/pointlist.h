@@ -4,7 +4,7 @@
 #define	RADIUS 5
 #include "pointnode.h"
 #include <SFML/Graphics.hpp>
-#define COLOR_Point sf::Color::Red
+#define COLOR_POINT sf::Color::Red
 #define COLOR_LINE	sf::Color::Red
 #define COLOR_OUTLINE sf::Color::Blue
 #include <iostream>
