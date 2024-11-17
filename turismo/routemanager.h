@@ -21,6 +21,11 @@ private:
 public:///Esto es lo unico publico 
 	RouteManager();
 	void initialize();
-
+	void menu(sf::RenderWindow&);
+	void header();
+	void ressetVectors();
+	bool ruouteexist(string);
+	Route& getRoute(string);
+	void drawRoute 
 };
 #endif
