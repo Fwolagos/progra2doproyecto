@@ -8,6 +8,7 @@
 #define BACKGROUND "sources/img/CostaRica.jpg"
 #define WINDOW_WIDTH 750
 #define WINDOW_HEIGHT 649
+#define NAME_WINDOW	 "Programa de rutas turisticas"
 using namespace std;
 
 
@@ -29,6 +30,5 @@ public:///Esto es lo unico publico
 	void ressetVectors();
 	bool ruouteexist(string);
 	Route& getRoute(string);
-	void drawRoute();
 };
 #endif
