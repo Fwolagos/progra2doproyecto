@@ -2,6 +2,7 @@
 #ifndef ROUTEMANAGER_H
 #define ROUTEMANGER_h
 #include <iostream>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "route.h"
@@ -24,11 +25,16 @@ private:
 
 public:///Esto es lo unico publico 
 	RouteManager();
+	~RouteManager();
 	void initialize();
 	void menu(sf::RenderWindow&);
 	void header();
 	void ressetVectors();
-	bool ruouteexist(string);
+	bool routeExist(string);
 	Route& getRoute(string);
+	void createRoute(sf::RenderWindow&);
+	void addRoute(Route*);
+	void showRoutes(sf::RenderWindow&);
+	void displayRoutes();
 };
 #endif

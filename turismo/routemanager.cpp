@@ -5,6 +5,8 @@ RouteManager::RouteManager() {
 	this->head = nullptr;
 }
 
+RouteManager::~RouteManager() {}
+
 void RouteManager::header() {
 	system("cls");
 	// Datos para el encabezado
@@ -21,16 +23,17 @@ void RouteManager::header() {
 	cout << "╚══════════════════════════════════════════╝" << endl;
 	cout << "\n";
 }
+
 void RouteManager::menu(sf::RenderWindow& window) {
 	int option;
 	header();
 	cout << "----------------------------" << endl;
 	cout << "1. Ver rutas" << endl;
 	cout << "2. Crear ruta" << endl;
-	cout << "3. Editar ruta" << endl;
+///	cout << "3. Editar ruta" << endl;
 	cout << "4. Eliminar ruta" << endl;
 	cout << "5. Renombrar ruta" << endl;
-	cout << "6. Renombrar punto de ruta" << endl;
+///	cout << "6. Renombrar punto de ruta" << endl;
 	cout << "0. Salir" << endl;
 	cout << "----------------------------" << endl;
 	cout << "Seleccione una opción: ";
@@ -80,7 +83,6 @@ void RouteManager::menu(sf::RenderWindow& window) {
 	}
 }
 
-
 void RouteManager::initialize() {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), NAME_WINDOW);
 
@@ -125,7 +127,7 @@ void RouteManager::ressetVectors() {
 	lines.clear();
 }
 
-bool RouteManager::ruouteexist(string name) {
+bool RouteManager::routeExist(string name) {
 	Route* temp = head;
 	while (temp->getNext() != nullptr && temp->getName() != name) {
 		temp = temp->getNext();
@@ -138,7 +140,6 @@ bool RouteManager::ruouteexist(string name) {
 	}
 }
 
-
 Route& RouteManager::getRoute(string name) {
 	Route* temp = head;
 	while (temp->getNext() != nullptr && temp->getName() != name) {
@@ -149,6 +150,106 @@ Route& RouteManager::getRoute(string name) {
 
 }
 
+void RouteManager::createRoute(sf::RenderWindow& window) {
+	ressetVectors();
+
+	string name;
+	Route* route = new Route();
+	PointList pointList;
+	bool isDrawing = true;
+
+	std::cout << "Ingrese el nombre de la ruta: ";
+	cin.ignore();
+	getline(cin, name);
+	route->setName(name);
+
+
+	sf::CircleShape circle(RADIUS);///aqui luego damos retoques con el tema de los circulos
+	circle.setFillColor(COLOR_POINT);
+
+	while (isDrawing) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
+				return;
+			}
+
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+				float x = static_cast<float>(mousePos.x);
+				float y = static_cast<float>(mousePos.y);
+
+				circle.setPosition(x - RADIUS, y - RADIUS);/// si centras los puntos 
+				circles.push_back(circle);
+
+				///conectamemos lineas
+				lines.push_back(sf::Vertex(sf::Vector2f(x, y), COLOR_LINE));
+
+				cout << "Ingrese el nombre del lugar en el punto (" << x << ", " << y << "): ";
+				cin.ignore();
+				getline(cin, name);
+				pointList.addPoint(name, x, y);
+			}
+
+
+			// Salir del modo de creación si presionamos ESC
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+				isDrawing = false;
+				route->setPointList(pointList);
+				addRoute(route);
+			}
+		}
+
+		window.clear();/// revisar si este en alguna ocacion nos afecta con el tema de limpiar pantalla a cada rato 
+		window.display();
+	}
+}
+
+void RouteManager::addRoute(Route* route) {
+	if (head == nullptr) {
+		head = route;
+	}
+	else {
+		Route* current = head;
+		while (current->getNext() != nullptr) {
+			current = current->getNext();
+		}
+		current->setNext(route);
+		route->setPrev(current);
+	}
+}
+
+void RouteManager::showRoutes(sf::RenderWindow& window) {
+	header();
+	ressetVectors();;
+	displayRoutes();
+	string name;
+
+	cout << "Ingrese el nombre de la ruta que desea mostrar: ";
+	cin.ignore();
+	getline(cin, name);
+
+	if (!routeExist(name)) {
+		cout << "Ruta no existe o nombre no coincide con la ruta" << endl;
+		system("pause");
+		menu(window);
+		return;
+
+	}
+
+	getRoute(name).getPointList().loadPoints(circles, lines);
+	return;
+
+}
+
+void RouteManager::displayRoutes() {
+	Route* current = head;
+	while (current != nullptr) {
+		std::cout << current->getName() << ", ";
+		current = current->getNext();
+	}
+}
 
 
 
