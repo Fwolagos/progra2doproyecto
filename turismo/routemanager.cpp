@@ -5,12 +5,21 @@
 RouteManager::RouteManager() {
 	this->head = nullptr;
 }
+
+void RouteManager::menu() {
+	
+}
+
+void RouteManager::header() {
+
+}
+
 void RouteManager::initialize() {
 	sf::RenderWindow window(sf::VideoMode(750,649), "test");
 
 	sf::Texture texture;
 	if (!texture.loadFromFile(PATH"img/CostaRica.jpg")) {
-		system("echo erro imagen no cargada& pause");
+		system("echo error imagen no cargada& pause");
 		return;
 	}
 	sf::Sprite sprite(texture);
@@ -32,6 +41,7 @@ void RouteManager::initialize() {
 		}
 		window.draw(sprite);
 		window.display();
+		menu();
 	}
 }
 
