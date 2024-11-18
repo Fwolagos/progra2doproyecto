@@ -1,13 +1,13 @@
-﻿#include "routemanager.h"
+﻿#include "routelist.h"
 
 
-RouteManager::RouteManager() {
+RouteList::RouteList() {
 	this->head = nullptr;
 }
 
-RouteManager::~RouteManager() {}
+RouteList::~RouteList() {}
 
-void RouteManager::header() {
+void RouteList::header() {
 	system("cls");
 	// Datos para el encabezado
 	string titulo = "GESTOR DE RUTAS TURISTICAS";
@@ -25,7 +25,7 @@ void RouteManager::header() {
 	cout << "\n";
 }
 
-void RouteManager::menu(sf::RenderWindow& window) {
+void RouteList::menu(sf::RenderWindow& window) {
 	int option;
 	header();
 	cout << "----------------------------" << endl;
@@ -79,7 +79,7 @@ void RouteManager::menu(sf::RenderWindow& window) {
 	}
 }
 
-void RouteManager::initialize() {
+void RouteList::initialize() {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), NAME_WINDOW);
 
 	sf::Texture texture;
@@ -121,12 +121,12 @@ void RouteManager::initialize() {
 /// <summary>
 /// limpiar vectores 
 /// </summary>
-void RouteManager::ressetVectors() {
+void RouteList::ressetVectors() {
 	circles.clear();
 	lines.clear();
 }
 
-bool RouteManager::routeExist(string name) {
+bool RouteList::routeExist(string name) {
 	Route* temp = head;
 	while (temp->getNext() != nullptr && temp->getName() != name) {
 		temp = temp->getNext();
@@ -139,7 +139,7 @@ bool RouteManager::routeExist(string name) {
 	}
 }
 
-Route& RouteManager::getRoute(string name) {
+Route& RouteList::getRoute(string name) {
 	Route* temp = head;
 	while (temp->getNext() != nullptr && temp->getName() != name) {
 		temp = temp->getNext();
@@ -149,7 +149,7 @@ Route& RouteManager::getRoute(string name) {
 
 }
 
-void RouteManager::createRoute(sf::RenderWindow& window) {
+void RouteList::createRoute(sf::RenderWindow& window) {
 	ressetVectors();
 
 	string name;
@@ -202,7 +202,7 @@ void RouteManager::createRoute(sf::RenderWindow& window) {
 	}
 }
 
-void RouteManager::addRoute(Route* route) {
+void RouteList::addRoute(Route* route) {
 	if (head == nullptr) {
 		head = route;
 	}
@@ -216,7 +216,7 @@ void RouteManager::addRoute(Route* route) {
 	}
 }
 
-void RouteManager::showRoutes(sf::RenderWindow& window) {
+void RouteList::showRoutes(sf::RenderWindow& window) {
 	header();
 	ressetVectors();;
 	displayRoutes();
@@ -239,7 +239,7 @@ void RouteManager::showRoutes(sf::RenderWindow& window) {
 
 }
 
-void RouteManager::displayRoutes() {
+void RouteList::displayRoutes() {
 	Route* current = head;
 	while (current != nullptr) {
 		std::cout << current->getName() << ", ";
@@ -247,7 +247,7 @@ void RouteManager::displayRoutes() {
 	}
 }
 
-void RouteManager::delRoute() {
+void RouteList::delRoute() {
 	string name;
 	ressetVectors();
 	header();
@@ -282,7 +282,7 @@ void RouteManager::delRoute() {
 
 }
 
-void RouteManager::renameRoute() {
+void RouteList::renameRoute() {
 	string name;
 	ressetVectors();
 	header();

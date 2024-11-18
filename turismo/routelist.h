@@ -1,6 +1,6 @@
 #pragma once
-#ifndef ROUTEMANAGER_H
-#define ROUTEMANGER_h
+#ifndef ROUTELIST_H
+#define ROUTELIST_H
 #include <iostream>
 #include <string>
 #include <SFML/Graphics.hpp>
@@ -13,7 +13,7 @@
 using namespace std;
 
 
-class RouteManager
+class RouteList
 {
 private:
 	Route* head;
@@ -24,8 +24,8 @@ private:
 
 
 public:///Esto es lo unico publico 
-	RouteManager();
-	~RouteManager();
+	RouteList();
+	~RouteList();
 	void initialize();
 	void menu(sf::RenderWindow&);
 	void header();

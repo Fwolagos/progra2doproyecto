@@ -24,7 +24,7 @@
     <ClCompile Include="pointlist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="routemanager.cpp">
+    <ClCompile Include="routelist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="route.cpp">
@@ -41,7 +41,7 @@
     <ClInclude Include="pointlist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="routemanager.h">
+    <ClInclude Include="routelist.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="route.h">
