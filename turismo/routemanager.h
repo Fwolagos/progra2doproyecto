@@ -36,5 +36,7 @@ public:///Esto es lo unico publico
 	void addRoute(Route*);
 	void showRoutes(sf::RenderWindow&);
 	void displayRoutes();
+	void delRoute();///no le vamos a pasar window a ver que
+	void renameRoute();
 };
 #endif

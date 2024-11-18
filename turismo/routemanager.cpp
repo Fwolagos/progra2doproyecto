@@ -10,17 +10,18 @@ RouteManager::~RouteManager() {}
 void RouteManager::header() {
 	system("cls");
 	// Datos para el encabezado
-	string titulo = "GESTOR DE RUTAS TURÍSTICAS";
+	string titulo = "GESTOR DE RUTAS TURISTICAS";
 	string desarrollador = "Antony Vega";
 	string fecha = "2024";
 
 	// Imprimir el encabezado
 	cout << "\n";
-	cout << "╔══════════════════════════════════════════╗" << endl;
-	cout << "║ " << titulo << "                                     ║" << endl;
-	cout << "║ Desarrollador: " << desarrollador << "                  ║" << endl;
-	cout << "║ Fecha: " << fecha << "                        ║" << endl;
-	cout << "╚══════════════════════════════════════════╝" << endl;
+	/////////--------------------------------------------
+	cout << "+------------------------------------------+" << endl;
+	cout << "| " << titulo << "                         |" << endl;
+	cout << "| Desarrollador: " << desarrollador << "   |" << endl;
+	cout << "| Fecha: " << fecha << "                   |" << endl;
+	cout << "+------------------------------------------+" << endl;
 	cout << "\n";
 }
 
@@ -30,41 +31,36 @@ void RouteManager::menu(sf::RenderWindow& window) {
 	cout << "----------------------------" << endl;
 	cout << "1. Ver rutas" << endl;
 	cout << "2. Crear ruta" << endl;
-///	cout << "3. Editar ruta" << endl;
+	///	cout << "3. Editar ruta" << endl;
 	cout << "4. Eliminar ruta" << endl;
 	cout << "5. Renombrar ruta" << endl;
-///	cout << "6. Renombrar punto de ruta" << endl;
+	///	cout << "6. Renombrar punto de ruta" << endl;
 	cout << "0. Salir" << endl;
 	cout << "----------------------------" << endl;
-	cout << "Seleccione una opción: ";
+	cout << "Seleccione una opcion: ";
 	cin >> option;
 
 	if (cin.fail()) {
 		cin.clear(); // Limpia el estado de error de `cin`
 		cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignora la entrada incorrecta
-		menu(window); // Llamada recursiva
 		return;
 	}
 	switch (option) {
 	case 1:
-		// Lógica para "Ver rutas"
-		cout << "Mostrando rutas..." << endl;
+		showRoutes(window);
 		break;
 	case 2:
-		// Lógica para "Crear ruta"
-		cout << "Creando nueva ruta..." << endl;
+		createRoute(window);
 		break;
 	case 3:
 		// Lógica para "Editar ruta"
 		cout << "Editando ruta..." << endl;
 		break;
 	case 4:
-		// Lógica para "Eliminar ruta"
-		cout << "Eliminando ruta..." << endl;
+		delRoute();
 		break;
 	case 5:
-		// Lógica para "Renombrar ruta"
-		cout << "Renombrando ruta..." << endl;
+		renameRoute();
 		break;
 	case 6:
 		// Lógica para "Renombrar punto de ruta"
@@ -110,9 +106,12 @@ void RouteManager::initialize() {
 		}
 		window.draw(sprite);
 		///dibujar puntos
-		for (const auto& circles : circles) {
-			window.draw(circles);
+		if (!circles.empty()) {
+			for (const auto& circles : circles) {
+				window.draw(circles);
+			}
 		}
+	
 
 		window.display();
 		menu(window);
@@ -200,9 +199,6 @@ void RouteManager::createRoute(sf::RenderWindow& window) {
 				addRoute(route);
 			}
 		}
-
-		window.clear();/// revisar si este en alguna ocacion nos afecta con el tema de limpiar pantalla a cada rato 
-		window.display();
 	}
 }
 
@@ -251,8 +247,63 @@ void RouteManager::displayRoutes() {
 	}
 }
 
+void RouteManager::delRoute() {
+	string name;
+	ressetVectors();
+	header();
+	displayRoutes();
 
+	cout << "Que ruta desea eliminar: ";
+	cin.ignore();
+	getline(cin, name);
+	if (!routeExist(name)) {
+		cout << "Ruta no existe o nombre no coincide!" << endl;
+		return;
+	}
+	Route* current = head;
+	while (current->getNext() != nullptr && current->getName() != name) {
+		current = current->getNext();
+	}
+	if (current->getNext() == nullptr && current->getName() != name) {
+		cout << "Ruta no encontrada o nombre no coincide!" << endl;
+		return;
+	}
+	else {
+		Route* next;
+		Route* prev;
+		next = current->getNext();
+		prev = current->getPrev();
 
+		next->setPrev(prev);
+		prev->setNext(next);
+		delete current;
+		return;
+	}
+
+}
+
+void RouteManager::renameRoute() {
+	string name;
+	ressetVectors();
+	header();
+	displayRoutes();
+
+	cout << "Ingrese el nombre de la ruta que desea renombrar :";
+	cin.ignore();
+	getline(cin, name);
+
+	if (!routeExist(name)) {
+		cout << "Ruta no encontrada o nombre no coincide" << endl;
+		system("pause");
+		return;
+	}
+	cout << "Ingrese el nuevo nombre: ";
+	cin.ignore();
+	getline(cin, name);
+
+	getRoute(name).setName(name);
+
+}
 
 
 
