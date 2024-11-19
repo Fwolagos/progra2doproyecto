@@ -19,11 +19,8 @@ private:
 public:///Esto es lo unico publico 
 	RouteList();
 	~RouteList();
-	void menu(sf::RenderWindow&);
 	bool routeExist(string);
 	Route& getRoute(string);
-	void createRoute(sf::RenderWindow&);
-	void showRoutes(sf::RenderWindow&);
 	void delRoute();///no le vamos a pasar window a ver que
 	void renameRoute();
 };
