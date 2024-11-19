@@ -1,0 +1,32 @@
+
+void PointList::loadPoints(vector<sf::CircleShape>& circles, vector<sf::Vertex>& lines) {
+	PointNode* temp = head;
+	while (temp != nullptr) {
+		sf::CircleShape circle(RADIUS);
+		circle.setFillColor(COLOR_POINT);
+		circle.setPosition(temp->getX(), temp->getY());
+		circle.setOutlineColor(COLOR_OUTLINE);
+		circles.push_back(circle);
+
+		///lineas
+		lines.push_back(sf::Vertex(sf::Vector2f(temp->getX(), temp->getY()), COLOR_LINE));
+	
+
+
+		temp = temp->getNext();
+	}
+}
+
+#pragma once
+#ifndef POINTLIST_H
+#define POINTLIST_H
+#define	RADIUS 5
+#include "pointnode.h"
+#include <SFML/Graphics.hpp>
+#define COLOR_POINT sf::Color::Red
+#define COLOR_LINE	sf::Color::Red
+#define COLOR_OUTLINE sf::Color::Blue
+#include <iostream>
+#include <vector>
+
+	void loadPoints(vector<sf::CircleShape>&, vector<sf::Vertex>&);

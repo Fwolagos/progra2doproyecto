@@ -19,6 +19,7 @@ public:
 
 	void initialize();
 	void header();
+	void menu();
 	void ressetVectors();
 	void displayRoutes();
 	void addRoute(Route*);
