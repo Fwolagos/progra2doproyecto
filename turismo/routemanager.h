@@ -28,8 +28,9 @@ private:
 	sf::CircleShape circle;
 	sf::Text label;
 	sf::Font font;
-	sf::Text routeName;
 	int state;
+	std::string inputText;
+	sf::Text text;
 public:
 	RouteManager();
 	~RouteManager();
@@ -39,6 +40,7 @@ public:
 	void menu();
 	void ressetVectors();
 	void drawRoute(sf::RenderWindow&);
-	/*void saveRoute();*/
+	void getText(sf::Event&);
+	void saveRoute();
 };
 

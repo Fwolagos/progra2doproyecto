@@ -2,7 +2,7 @@
 
 RouteManager::RouteManager() {
 	this->routeList = RouteList();
-	this->state = 2;
+	this->state = 0;
 	circle.setRadius(RADIUS);
 	circle.setFillColor(COLOR_POINT);
 	circle.setOutlineColor(COLOR_OUTLINE);
@@ -12,6 +12,11 @@ RouteManager::RouteManager() {
 	label.setCharacterSize(CHARACTER_SIZE);
 	label.setFillColor(COLOR_TEXT);
 	label.setOutlineThickness(OUTLINETHICKNESS);
+
+	text.setFont(font);
+	text.setCharacterSize(30);
+	text.setFillColor(sf::Color::Black);
+	text.setPosition(50, 200);
 }
 
 RouteManager::~RouteManager() {}
@@ -36,58 +41,14 @@ void RouteManager::header() {
 }
 
 void RouteManager::menu() {
-	int option;
 	header();
-	cout << "----------------------------" << endl;
-	cout << "1. Ver rutas" << endl;
-	cout << "2. Crear ruta" << endl;
-	///	cout << "3. Editar ruta" << endl;
-	cout << "4. Eliminar ruta" << endl;
-	cout << "5. Renombrar ruta" << endl;
-	///	cout << "6. Renombrar punto de ruta" << endl;
-	cout << "0. Salir" << endl;
-	cout << "----------------------------" << endl;
-	cout << "Seleccione una opcion: ";
-	cin >> option;
-
-	if (cin.fail()) {
-		cin.clear(); // Limpia el estado de error de `cin`
-		cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignora la entrada incorrecta
-		return;
-	}
-	switch (option) {
-	case 1:
-		///showRoutes(window);
-		break;
-	case 2:
-		state = 2;
-		///createRoute(window);
-		break;
-	case 3:
-		// Lógica para "Editar ruta"
-		cout << "Editando ruta..." << endl;
-		break;
-	case 4:
-		///delRoute();
-		break;
-	case 5:
-		///renameRoute();
-		break;
-	case 6:
-		// Lógica para "Renombrar punto de ruta"
-		cout << "Renombrando punto de ruta..." << endl;
-		break;
-	case 0:
-		// Opción para salir
-
-		///window.close();
-		cout << "Saliendo del programa..." << endl;
-		return;
-	default:
-		// Si se ingresa un número fuera del rango
-		///menu(window); // Llamada recursiva para volver a mostrar el menú
-		return;
-	}
+	std::cout << "\n=== COMANDOS DISPONIBLES ===\n";
+	std::cout << "Ctrl + C: Crear ruta\n";
+	std::cout << "Ctrl + E: Eliminar ruta\n";
+	std::cout << "Ctrl + V: Ver rutas\n";
+	std::cout << "Ctrl + D: Editar ruta\n";
+	std::cout << "Ctrl + Q: Salir\n";
+	std::cout << "=============================\n";
 }
 
 void RouteManager::initialize() {
@@ -114,16 +75,32 @@ void RouteManager::initialize() {
 
 
 			}
-			if (event.type == sf::Event::KeyPressed && (state == 2 && event.key.code == sf::Keyboard::Escape)) {
+
+			if (event.type == sf::Event::KeyPressed ) {
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
+					state = 2;
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
+					routeList.displayRoutes();
+				}
+
 				if (state == 2 && event.key.code == sf::Keyboard::Escape) {
-					state = 1;
-					///saveRoute();
+					state = 0;
+					saveRoute();
 				}
 			}
-		}
 
+			// Manejar entrada de texto
+			if (event.type == sf::Event::TextEntered && state == 3) {
+				getText(event);
+			}
+		}
+		text.setString(inputText);
 		window.clear();
 		window.draw(sprite);
+
 		if (!labels.empty()) {
 			for (const auto& label : labels) {
 				window.draw(label);
@@ -134,7 +111,6 @@ void RouteManager::initialize() {
 			// sf::LinesStrip dibuja una serie de vértices conectados, formando una línea desde el primer punto hasta el último.
 			window.draw(&lines[0], lines.size(), sf::LinesStrip);
 		}
-
 		///dibujar puntos
 		if (!circles.empty()) {
 			for (const auto& circles : circles) {
@@ -142,10 +118,15 @@ void RouteManager::initialize() {
 			}
 		}
 
+		window.draw(text);
 		window.display();
-		/*	if (state == 0) {
-				menu();
-			}*/
+		if (state == 1) {
+			ressetVectors();
+		}
+		if (state == 0) {
+			menu();
+			state = 1;
+		}
 
 	}
 	return;
@@ -154,34 +135,59 @@ void RouteManager::initialize() {
 void RouteManager::ressetVectors() {
 	circles.clear();
 	lines.clear();
+	labels.clear();
 }
 
 void RouteManager::drawRoute(sf::RenderWindow& window) {
-	//string name;
-	//header();
-	/*cout << "Ingrese el nombre del punto: ";*/
-	//cin.ignore();
-	//getline(cin, name);
-	this->label.setString("Dinosaurio");
+
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);/// esto podria estar dentro de una funcion y nada mas le paso window
-	label.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
 	circle.setPosition(sf::Vector2f(mousePos.x - RADIUS, mousePos.y - RADIUS));
 	circles.push_back(circle);
 	lines.push_back(sf::Vertex(sf::Vector2f(mousePos.x, mousePos.y), COLOR_LINE));
-	this->labels.push_back(this->label);
-	system("cls");
+	state = 3;
 	return;
 }
 
-//void RouteManager::saveRoute() {
-//	PointList route;
-//	circles[1];
-//	for (const auto& point : circles) {
-//		sf::Vector2f position;
-//		position = circle.getPosition();
-//		route.
-//	}
-//}
+void RouteManager::saveRoute() {
+	PointList pointList;
+	int size = circles.size();
+	for (int i = 0; i < size; i++) {
+		sf::Vector2f position = circles[i].getPosition();
+		pointList.addPoint(labels[i].getString(), position.x, position.y);
+	}
+	string routename;
+	routename = labels[0].getString() + " - " + labels[labels.size() - 1].getString();
+	Route* route = new Route();
+	route->setName(routename);
+	route->setPointList(pointList);
+	routeList.addRoute(route);
+}
+
+void RouteManager::getText(sf::Event& event) {
+	cout << "Pude ingresar texto: ";
+	// Si se presiona Enter, imprime y reinicia el texto
+	if (event.text.unicode == '\r') { // '\r' es Enter en SFML
+		std::cout << "Texto ingresado: " << inputText << std::endl;
+		sf::Vector2f position = circles[circles.size() - 1].getPosition();
+		label.setString(inputText);
+		label.setPosition(sf::Vector2f(position.x, position.y));
+
+		labels.push_back(label);
+		inputText.clear();
+		state = 2;
+	}
+	// Si se presiona Backspace, elimina el último carácter
+	else if (event.text.unicode == '\b') { // '\b' es Backspace
+		if (!inputText.empty()) {
+			inputText.pop_back();
+		}
+	}
+	// Para caracteres normales, los agregamos al texto
+	else if (event.text.unicode < 128) { // Filtrar caracteres válidos (ASCII)
+		inputText += static_cast<char>(event.text.unicode);
+	}
+}
+
 
 
 
