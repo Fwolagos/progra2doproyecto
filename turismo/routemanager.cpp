@@ -1,27 +1,37 @@
 #include "routemanager.h"
 
+RouteManager::RouteManager() {
+	this->routeList = RouteList();
+	this->state = 2;
+	circle.setRadius(RADIUS);
+	circle.setFillColor(COLOR_POINT);
+	circle.setOutlineColor(COLOR_OUTLINE);
+	font.loadFromFile(PATH_FONT);
+	this->label = sf::Text();
+	label.setFont(font);
+	label.setCharacterSize(CHARACTER_SIZE);
+}
 
+RouteManager::~RouteManager() {}
 
 
 void RouteManager::header() {
-system("cls");
-// Datos para el encabezado
-string titulo = "GESTOR DE RUTAS TURISTICAS";
-string desarrollador = "Antony Vega";
-string fecha = "2024";
+	system("cls");
+	// Datos para el encabezado
+	string titulo = "GESTOR DE RUTAS TURISTICAS";
+	string desarrollador = "Antony Vega";
+	string fecha = "2024";
 
-// Imprimir el encabezado
-cout << "\n";
-/////////--------------------------------------------
-cout << "+------------------------------------------+" << endl;
-cout << "| " << titulo << "                         |" << endl;
-cout << "| Desarrollador: " << desarrollador << "   |" << endl;
-cout << "| Fecha: " << fecha << "                   |" << endl;
-cout << "+------------------------------------------+" << endl;
-cout << "\n";
+	// Imprimir el encabezado
+	cout << "\n";
+	/////////--------------------------------------------
+	cout << "+------------------------------------------+" << endl;
+	cout << "| " << titulo << "                         |" << endl;
+	cout << "| Desarrollador: " << desarrollador << "   |" << endl;
+	cout << "| Fecha: " << fecha << "                   |" << endl;
+	cout << "+------------------------------------------+" << endl;
+	cout << "\n";
 }
-
-
 
 void RouteManager::menu() {
 	int option;
@@ -45,20 +55,21 @@ void RouteManager::menu() {
 	}
 	switch (option) {
 	case 1:
-		showRoutes(window);
+		///showRoutes(window);
 		break;
 	case 2:
-		createRoute(window);
+		state = 2;
+		///createRoute(window);
 		break;
 	case 3:
 		// Lógica para "Editar ruta"
 		cout << "Editando ruta..." << endl;
 		break;
 	case 4:
-		delRoute();
+		///delRoute();
 		break;
 	case 5:
-		renameRoute();
+		///renameRoute();
 		break;
 	case 6:
 		// Lógica para "Renombrar punto de ruta"
@@ -67,17 +78,17 @@ void RouteManager::menu() {
 	case 0:
 		// Opción para salir
 
-		window.close();
+		///window.close();
 		cout << "Saliendo del programa..." << endl;
 		return;
 	default:
 		// Si se ingresa un número fuera del rango
-		menu(window); // Llamada recursiva para volver a mostrar el menú
+		///menu(window); // Llamada recursiva para volver a mostrar el menú
 		return;
 	}
 }
 
-void RouteList::initialize() {
+void RouteManager::initialize() {
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), NAME_WINDOW);
 
 	sf::Texture texture;
@@ -94,31 +105,97 @@ void RouteList::initialize() {
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 				window.close();
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+				if (state == 2) {
+					cout << state;
+					drawRoute(window);
+				}
+			}
+			if (event.type == sf::Event::KeyPressed) {
+				if (state == 2 && event.key.code == sf::Keyboard::Escape) {
+					state == 1;
+					cout << "escape";
+					///saveRoute();
+				}
+			}
 		}
 
 		window.clear();
+		if (!labels.empty()) {
+			for (const auto& label : labels) {
+				window.draw(label);
+			}
+		}
 		if (!lines.empty()) {
 			// Si hay puntos en lines, se dibujan como una línea continua conectada entre ellos usando sf::LinesStrip.
 			// sf::LinesStrip dibuja una serie de vértices conectados, formando una línea desde el primer punto hasta el último.
 			window.draw(&lines[0], lines.size(), sf::LinesStrip);
 		}
-		window.draw(sprite);
+	
 		///dibujar puntos
 		if (!circles.empty()) {
 			for (const auto& circles : circles) {
 				window.draw(circles);
 			}
 		}
-
-
+		window.draw(sprite);
 		window.display();
-		menu(window);
+	/*	if (state == 0) {
+			menu();
+		}*/
+
 	}
+	return;
 }
 
-void RouteList::ressetVectors() {
+void RouteManager::ressetVectors() {
 	circles.clear();
 	lines.clear();
 }
+
+void RouteManager::drawRoute(sf::RenderWindow& window) {
+	//string name;
+	//header();
+	//cout << "Ingrese el nombre del punto: ";
+	//cin.ignore();
+	//getline(cin, name);
+	//this->label.setString(name);
+	sf::Vector2i mousePos = sf::Mouse::getPosition(window);/// esto podria estar dentro de una funcion y nada mas le paso window
+	label.setPosition(sf::Vector2f(mousePos.x,mousePos.y));
+	circle.setPosition(sf::Vector2f(mousePos.x - RADIUS, mousePos.y - RADIUS));
+	circles.push_back(circle);
+	lines.push_back(sf::Vertex(sf::Vector2f(mousePos.x, mousePos.y), COLOR_LINE)); 
+	this->labels.push_back(this->label);
+	system("cls");
+	return;
+}
+
+//void RouteManager::saveRoute() {
+//	PointList route;
+//	circles[1];
+//	for (const auto& point : circles) {
+//		sf::Vector2f position;
+//		position = circle.getPosition();
+//		route.
+//	}
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
