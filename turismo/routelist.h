@@ -23,5 +23,7 @@ public:///Esto es lo unico publico
 	Route& getRoute(string);
 	void delRoute();///no le vamos a pasar window a ver que
 	void renameRoute();
+	void addRoute(Route*);
+	void displayRoutes();
 };
 #endif

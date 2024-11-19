@@ -7,12 +7,6 @@ RouteList::RouteList() {
 
 RouteList::~RouteList() {}
 
-
-
-
-y>
-
-
 bool RouteList::routeExist(string name) {
 	Route* temp = head;
 	while (temp->getNext() != nullptr && temp->getName() != name) {
@@ -36,9 +30,6 @@ Route& RouteList::getRoute(string name) {
 
 }
 
-
-
-
 void RouteList::addRoute(Route* route) {
 	if (head == nullptr) {
 		head = route;
@@ -53,8 +44,6 @@ void RouteList::addRoute(Route* route) {
 	}
 }
 
-
-
 void RouteList::displayRoutes() {
 	Route* current = head;
 	while (current != nullptr) {
@@ -65,8 +54,6 @@ void RouteList::displayRoutes() {
 
 void RouteList::delRoute() {
 	string name;
-	ressetVectors();
-	header();
 	displayRoutes();
 
 	cout << "Que ruta desea eliminar: ";
@@ -100,8 +87,7 @@ void RouteList::delRoute() {
 
 void RouteList::renameRoute() {
 	string name;
-	ressetVectors();
-	header();
+;
 	displayRoutes();
 
 	cout << "Ingrese el nombre de la ruta que desea renombrar :";
