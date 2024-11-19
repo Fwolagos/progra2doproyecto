@@ -17,6 +17,7 @@ RouteManager::RouteManager() {
 	text.setCharacterSize(30);
 	text.setFillColor(sf::Color::Black);
 	text.setPosition(50, 200);
+	isTextEntered = false;
 }
 
 RouteManager::~RouteManager() {}
@@ -42,13 +43,14 @@ void RouteManager::header() {
 
 void RouteManager::menu() {
 	header();
-	std::cout << "\n=== COMANDOS DISPONIBLES ===\n";
-	std::cout << "Ctrl + C: Crear ruta\n";
-	std::cout << "Ctrl + E: Eliminar ruta\n";
-	std::cout << "Ctrl + V: Ver rutas\n";
-	std::cout << "Ctrl + D: Editar ruta\n";
-	std::cout << "Ctrl + Q: Salir\n";
-	std::cout << "=============================\n";
+	cout << "\n=== COMANDOS DISPONIBLES ===\n";
+	cout << "Ctrl + C: Crear ruta\n";
+	cout << "Ctrl + E: Eliminar ruta\n";
+	cout << "Ctrl + V: Ver rutas\n";
+	cout << "Ctrl + D: Editar ruta\n";
+	cout << "Ctrl + Q: Salir\n";
+	cout << "Ctrl + R: limpiar pantalla\n";
+	cout << "=============================\n";
 }
 
 void RouteManager::initialize() {
@@ -76,7 +78,7 @@ void RouteManager::initialize() {
 
 			}
 
-			if (event.type == sf::Event::KeyPressed ) {
+			if (event.type == sf::Event::KeyPressed) {
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
 					state = 2;
@@ -84,18 +86,25 @@ void RouteManager::initialize() {
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
 					routeList.displayRoutes();
+					state = 4;
 				}
 
 				if (state == 2 && event.key.code == sf::Keyboard::Escape) {
 					state = 0;
+					isTextEntered = false;
 					saveRoute();
+					
 				}
 			}
 
 			// Manejar entrada de texto
-			if (event.type == sf::Event::TextEntered && state == 3) {
+			if (event.type == sf::Event::TextEntered && isTextEntered) {
 				getText(event);
 			}
+		}
+		if (state == 4) {
+			isTextEntered = true;// esto es para que no me tome caracteres raros que no van
+
 		}
 		text.setString(inputText);
 		window.clear();
@@ -120,9 +129,10 @@ void RouteManager::initialize() {
 
 		window.draw(text);
 		window.display();
-		if (state == 1) {
-			ressetVectors();
-		}
+		//if (state == 1) {// este da mala pinta
+		//	system("pause");
+		//	ressetVectors();
+		//}
 		if (state == 0) {
 			menu();
 			state = 1;
@@ -144,6 +154,7 @@ void RouteManager::drawRoute(sf::RenderWindow& window) {
 	circle.setPosition(sf::Vector2f(mousePos.x - RADIUS, mousePos.y - RADIUS));
 	circles.push_back(circle);
 	lines.push_back(sf::Vertex(sf::Vector2f(mousePos.x, mousePos.y), COLOR_LINE));
+	isTextEntered = true;
 	state = 3;
 	return;
 }
@@ -156,25 +167,38 @@ void RouteManager::saveRoute() {
 		pointList.addPoint(labels[i].getString(), position.x, position.y);
 	}
 	string routename;
-	routename = labels[0].getString() + " - " + labels[labels.size() - 1].getString();
+	routename = labels[0].getString() + "-" + labels[labels.size() - 1].getString();
 	Route* route = new Route();
 	route->setName(routename);
 	route->setPointList(pointList);
 	routeList.addRoute(route);
+	ressetVectors();
 }
 
 void RouteManager::getText(sf::Event& event) {
-	cout << "Pude ingresar texto: ";
+	//cout << "Pude ingresar texto: ";
 	// Si se presiona Enter, imprime y reinicia el texto
 	if (event.text.unicode == '\r') { // '\r' es Enter en SFML
-		std::cout << "Texto ingresado: " << inputText << std::endl;
-		sf::Vector2f position = circles[circles.size() - 1].getPosition();
-		label.setString(inputText);
-		label.setPosition(sf::Vector2f(position.x, position.y));
+		if (state == 3) {
+			std::cout << "Texto ingresado: " << inputText << std::endl;
+			sf::Vector2f position = circles[circles.size() - 1].getPosition();
+			label.setString(inputText);
+			label.setPosition(sf::Vector2f(position.x, position.y));
 
-		labels.push_back(label);
-		inputText.clear();
-		state = 2;
+			labels.push_back(label);
+			inputText.clear();
+			isTextEntered = false;
+			state = 2;
+		}
+		if (state == 4) {
+			std::cout << "Texto ingresado: " << inputText << std::endl;
+			isTextEntered = false;
+			loadRoute(inputText);
+			inputText.clear();
+			state = 0;
+		}
+
+
 	}
 	// Si se presiona Backspace, elimina el último carácter
 	else if (event.text.unicode == '\b') { // '\b' es Backspace
@@ -187,6 +211,34 @@ void RouteManager::getText(sf::Event& event) {
 		inputText += static_cast<char>(event.text.unicode);
 	}
 }
+
+void RouteManager::loadRoute(string& routeName) {
+	ressetVectors();
+	if (routeList.routeExist(routeName)) {
+		Route& route = routeList.getRoute(routeName);
+		PointList& pointList = route.getPointList();
+		PointNode& head = pointList.getHead();
+		///ya que tengo a head literalmente cargo lo puntos
+		PointNode* current = &head;
+		while (current != nullptr) {
+			circle.setPosition(sf::Vector2f(current->getX(), current->getY()));
+			circles.push_back(circle);
+			lines.push_back(sf::Vertex(sf::Vector2f(current->getX(), current->getY()), COLOR_LINE));
+			label.setString(current->getName());
+			labels.push_back(label);
+			current = current->getNext();
+		}
+
+		return;
+	}
+	else {
+		cout << "Ruta no encontrada" << endl;
+		state = 0;
+		system("pause");
+		return;
+	}
+}
+
 
 
 

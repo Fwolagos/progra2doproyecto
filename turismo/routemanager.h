@@ -31,6 +31,7 @@ private:
 	int state;
 	std::string inputText;
 	sf::Text text;
+	bool isTextEntered;
 public:
 	RouteManager();
 	~RouteManager();
@@ -42,5 +43,6 @@ public:
 	void drawRoute(sf::RenderWindow&);
 	void getText(sf::Event&);
 	void saveRoute();
+	void loadRoute(string&);
 };
 
