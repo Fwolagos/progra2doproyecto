@@ -17,7 +17,7 @@ public:
 	void delPoint(PointNode*);
 	void editPointName(PointNode*, string);
 	void editPointPosition(PointNode*, int[2]);
-	PointNode& getList();
+	PointNode& getHead();
 
 
 };

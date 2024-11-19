@@ -47,7 +47,7 @@ void PointList::editPointPosition(PointNode* point, int position[2]) {
 	point->setX(position[0]);
 	point->setY(position[1]);
 }
-PointNode& PointList::getList() {
+PointNode& PointList::getHead() {
 	return*head;
 }
 
