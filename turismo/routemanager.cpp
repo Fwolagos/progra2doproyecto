@@ -10,6 +10,8 @@ RouteManager::RouteManager() {
 	this->label = sf::Text();
 	label.setFont(font);
 	label.setCharacterSize(CHARACTER_SIZE);
+	label.setFillColor(COLOR_TEXT);
+	label.setOutlineThickness(OUTLINETHICKNESS);
 }
 
 RouteManager::~RouteManager() {}
@@ -107,20 +109,21 @@ void RouteManager::initialize() {
 				window.close();
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 				if (state == 2) {
-					cout << state;
 					drawRoute(window);
 				}
+
+
 			}
-			if (event.type == sf::Event::KeyPressed) {
+			if (event.type == sf::Event::KeyPressed && (state == 2 && event.key.code == sf::Keyboard::Escape)) {
 				if (state == 2 && event.key.code == sf::Keyboard::Escape) {
-					state == 1;
-					cout << "escape";
+					state = 1;
 					///saveRoute();
 				}
 			}
 		}
 
 		window.clear();
+		window.draw(sprite);
 		if (!labels.empty()) {
 			for (const auto& label : labels) {
 				window.draw(label);
@@ -131,18 +134,18 @@ void RouteManager::initialize() {
 			// sf::LinesStrip dibuja una serie de vértices conectados, formando una línea desde el primer punto hasta el último.
 			window.draw(&lines[0], lines.size(), sf::LinesStrip);
 		}
-	
+
 		///dibujar puntos
 		if (!circles.empty()) {
 			for (const auto& circles : circles) {
 				window.draw(circles);
 			}
 		}
-		window.draw(sprite);
+
 		window.display();
-	/*	if (state == 0) {
-			menu();
-		}*/
+		/*	if (state == 0) {
+				menu();
+			}*/
 
 	}
 	return;
@@ -156,15 +159,15 @@ void RouteManager::ressetVectors() {
 void RouteManager::drawRoute(sf::RenderWindow& window) {
 	//string name;
 	//header();
-	//cout << "Ingrese el nombre del punto: ";
+	/*cout << "Ingrese el nombre del punto: ";*/
 	//cin.ignore();
 	//getline(cin, name);
-	//this->label.setString(name);
+	this->label.setString("Dinosaurio");
 	sf::Vector2i mousePos = sf::Mouse::getPosition(window);/// esto podria estar dentro de una funcion y nada mas le paso window
-	label.setPosition(sf::Vector2f(mousePos.x,mousePos.y));
+	label.setPosition(sf::Vector2f(mousePos.x, mousePos.y));
 	circle.setPosition(sf::Vector2f(mousePos.x - RADIUS, mousePos.y - RADIUS));
 	circles.push_back(circle);
-	lines.push_back(sf::Vertex(sf::Vector2f(mousePos.x, mousePos.y), COLOR_LINE)); 
+	lines.push_back(sf::Vertex(sf::Vector2f(mousePos.x, mousePos.y), COLOR_LINE));
 	this->labels.push_back(this->label);
 	system("cls");
 	return;

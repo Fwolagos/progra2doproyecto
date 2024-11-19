@@ -9,11 +9,13 @@
 #define WINDOW_WIDTH 750
 #define WINDOW_HEIGHT 649
 #define NAME_WINDOW	 "Programa de rutas turisticas"
-#define COLOR_POINT sf::Color::Red
-#define COLOR_LINE	sf::Color::Red
+#define COLOR_POINT sf::Color::Blue
+#define COLOR_LINE	sf::Color::Blue
 #define COLOR_OUTLINE sf::Color::Blue
+#define COLOR_TEXT sf::Color::Black
 #define RADIUS 5
 #define CHARACTER_SIZE 12
+#define OUTLINETHICKNESS 0.2f
 using namespace std;
 
 class RouteManager
