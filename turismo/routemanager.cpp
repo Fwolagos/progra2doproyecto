@@ -57,6 +57,7 @@ void RouteManager::menu() {
 }
 
 void RouteManager::initialize() {
+	importDates();
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), NAME_WINDOW);
 
 	sf::Texture texture;
@@ -71,8 +72,11 @@ void RouteManager::initialize() {
 	sf::Event event;
 	while (window.isOpen()) {
 		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
+			if (event.type == sf::Event::Closed) {
+				exportToFile();
 				window.close();
+			}
+			
 			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
 				if (state == 2) {
 					drawRoute(window);
@@ -248,8 +252,68 @@ void RouteManager::loadRoute(string& routeName) {
 }
 
 
+///*************************cargar y descarga de datos a un txt
 
+void RouteManager::exportToFile() {
+	ofstream outFile(PATH_FILE);
+	if (!outFile.is_open()) {
+		cout << "No se pudo abrir el archivo para guardar." << endl;
+		return;
+	}
 
+	Route* currentRoute = &routeList.getHead();
+	while (currentRoute != nullptr) {
+		outFile << "Route: " << currentRoute->getName() << endl;
+		PointNode* currentPoint = &currentRoute->getPointList().getHead();
+		while (currentPoint != nullptr) {
+			outFile << "Point: " << currentPoint->getName() << ","
+				<< currentPoint->getX() << ","
+				<< currentPoint->getY() << endl;
+			currentPoint = currentPoint->getNext();
+		}
+		currentRoute = currentRoute->getNext();
+		outFile << "EndRoute" << endl; // Marcador para finalizar una ruta
+	}
+
+	outFile.close();
+	cout << "Datos guardados en " << PATH_FILE << endl;
+}
+void RouteManager::importDates() {
+	ifstream inFile(PATH_FILE);
+	if (!inFile.is_open()) {
+		cout << "No se pudo abrir el archivo para cargar." << endl;
+		return;
+	}
+
+	string line, routeName, pointName;
+	int x, y;
+	Route* currentRoute = nullptr;
+
+	while (getline(inFile, line)) {
+		if (line.find("Route:") == 0) { // Detecta una nueva ruta
+			routeName = line.substr(7); // Elimina "Route: "
+			currentRoute = new Route(routeName);
+			routeList.addRoute(currentRoute);
+		}
+		else if (line.find("Point:") == 0) { // Detecta un nuevo punto
+			size_t comma1 = line.find(",", 7);
+			size_t comma2 = line.find(",", comma1 + 1);
+			pointName = line.substr(7, comma1 - 7);
+			x = stoi(line.substr(comma1 + 1, comma2 - comma1 - 1));
+			y = stoi(line.substr(comma2 + 1));
+
+			if (currentRoute != nullptr) {
+				currentRoute->getPointList().addPoint(pointName, x, y);
+			}
+		}
+		else if (line == "EndRoute") {
+			currentRoute = nullptr; // Finaliza una ruta
+		}
+	}
+
+	inFile.close();
+	cout << "Datos cargados desde " << PATH_FILE << endl;
+}
 
 
 

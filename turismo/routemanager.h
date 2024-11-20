@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include "routelist.h"
@@ -18,6 +20,7 @@
 #define OUTLINETHICKNESS 0.2f
 #define TEXBOX_WIDTH 220
 #define TEXBOX_HEIGHT 580
+#define PATH_FILE "sources/dates/routes.txt"
 using namespace std;
 
 class RouteManager
@@ -47,5 +50,7 @@ public:
 	void getText(sf::Event&);
 	void saveRoute();
 	void loadRoute(string&);
+	void importDates();
+	void exportToFile();
 };
 
