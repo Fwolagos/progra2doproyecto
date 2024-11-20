@@ -100,8 +100,13 @@ void RouteManager::initialize() {
 					routeList.displayRoutes();
 					state = 4;
 				}
-
-				if (state == 2 && event.key.code == sf::Keyboard::Escape) {
+				
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+					routeList.displayRoutes();
+					state = 5;
+				}
+			
+					if (state == 2 && event.key.code == sf::Keyboard::Escape) {
 					state = 0;
 					isTextEntered = false;
 					saveRoute();
@@ -115,7 +120,7 @@ void RouteManager::initialize() {
 				getText(event);
 			}
 		}
-		if (state == 4) {
+		if (state == 4|| state == 5) {
 			isTextEntered = true;// esto es para que no me tome caracteres raros que no van
 
 		}
@@ -207,6 +212,13 @@ void RouteManager::getText(sf::Event& event) {
 			std::cout << "Texto ingresado: " << inputText << std::endl;
 			isTextEntered = false;
 			loadRoute(inputText);
+			inputText.clear();
+			state = 0;
+		}
+		if (state == 5) {
+			std::cout << "Texto ingresado: " << inputText << std::endl;
+			routeList.delRoute(inputText);
+			isTextEntered = false;
 			inputText.clear();
 			state = 0;
 		}
