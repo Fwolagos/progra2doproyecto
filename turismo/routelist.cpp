@@ -52,37 +52,54 @@ void RouteList::displayRoutes() {
 	}
 }
 
-void RouteList::delRoute() {
-	string name;
-	displayRoutes();
+void RouteList::delRoute(string& name) {
 
-	cout << "Que ruta desea eliminar: ";
-	cin.ignore();
-	getline(cin, name);
 	if (!routeExist(name)) {
 		cout << "Ruta no existe o nombre no coincide!" << endl;
 		return;
 	}
+
 	Route* current = head;
-	while (current->getNext() != nullptr && current->getName() != name) {
+
+	// Buscar la ruta con el nombre especificado
+	while (current != nullptr && current->getName() != name) {
 		current = current->getNext();
 	}
-	if (current->getNext() == nullptr && current->getName() != name) {
+
+	// Si no se encontró la ruta
+	if (current == nullptr) {
 		cout << "Ruta no encontrada o nombre no coincide!" << endl;
 		return;
 	}
-	else {
-		Route* next;
-		Route* prev;
-		next = current->getNext();
-		prev = current->getPrev();
 
-		next->setPrev(prev);
-		prev->setNext(next);
+	// Si la ruta es la única en la lista
+	if (current->getPrev() == nullptr && current->getNext() == nullptr) {
+		head = nullptr; // La lista queda vacía
 		delete current;
 		return;
 	}
 
+	// Si la ruta es la primera en la lista
+	if (current->getPrev() == nullptr) {
+		head = current->getNext(); // El siguiente elemento se convierte en la cabeza
+		head->setPrev(nullptr);
+		delete current;
+		return;
+	}
+
+	// Si la ruta es la última en la lista
+	if (current->getNext() == nullptr) {
+		current->getPrev()->setNext(nullptr);
+		delete current;
+		return;
+	}
+
+	// Si la ruta está en el medio de la lista
+	Route* prev = current->getPrev();
+	Route* next = current->getNext();
+	prev->setNext(next);
+	next->setPrev(prev);
+	delete current;
 }
 
 void RouteList::renameRoute() {
