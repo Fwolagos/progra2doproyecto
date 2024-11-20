@@ -16,6 +16,8 @@
 #define RADIUS 5
 #define CHARACTER_SIZE 12
 #define OUTLINETHICKNESS 0.2f
+#define TEXBOX_WIDTH 220
+#define TEXBOX_HEIGHT 580
 using namespace std;
 
 class RouteManager
@@ -31,6 +33,7 @@ private:
 	int state;
 	std::string inputText;
 	sf::Text text;
+	sf::RectangleShape textBox;
 	bool isTextEntered;
 public:
 	RouteManager();

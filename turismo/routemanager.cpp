@@ -16,7 +16,10 @@ RouteManager::RouteManager() {
 	text.setFont(font);
 	text.setCharacterSize(30);
 	text.setFillColor(sf::Color::Black);
-	text.setPosition(50, 200);
+	text.setPosition(TEXBOX_WIDTH, TEXBOX_HEIGHT);
+	textBox.setSize(sf::Vector2f(300, 40));
+	textBox.setFillColor(sf::Color::White);
+	textBox.setPosition(sf::Vector2f(TEXBOX_WIDTH, TEXBOX_HEIGHT));
 	isTextEntered = false;
 }
 
@@ -47,8 +50,8 @@ void RouteManager::menu() {
 	cout << "Ctrl + C: Crear ruta\n";
 	cout << "Ctrl + E: Eliminar ruta\n";
 	cout << "Ctrl + V: Ver rutas\n";
-	cout << "Ctrl + D: Editar ruta\n";
-	cout << "Ctrl + Q: Salir\n";
+	//cout << "Ctrl + D: Editar ruta\n";
+	/*cout << "Ctrl + Q: Salir\n";*/
 	cout << "Ctrl + R: limpiar pantalla\n";
 	cout << "=============================\n";
 }
@@ -82,6 +85,11 @@ void RouteManager::initialize() {
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::C)) {
 					state = 2;
+					ressetVectors();
+				}
+
+				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+					ressetVectors();
 				}
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
@@ -93,7 +101,8 @@ void RouteManager::initialize() {
 					state = 0;
 					isTextEntered = false;
 					saveRoute();
-					
+
+
 				}
 			}
 
@@ -106,7 +115,9 @@ void RouteManager::initialize() {
 			isTextEntered = true;// esto es para que no me tome caracteres raros que no van
 
 		}
+
 		text.setString(inputText);
+
 		window.clear();
 		window.draw(sprite);
 
@@ -127,12 +138,10 @@ void RouteManager::initialize() {
 			}
 		}
 
+		window.draw(textBox);
 		window.draw(text);
 		window.display();
-		//if (state == 1) {// este da mala pinta
-		//	system("pause");
-		//	ressetVectors();
-		//}
+
 		if (state == 0) {
 			menu();
 			state = 1;
@@ -234,7 +243,6 @@ void RouteManager::loadRoute(string& routeName) {
 	else {
 		cout << "Ruta no encontrada" << endl;
 		state = 0;
-		system("pause");
 		return;
 	}
 }
