@@ -130,11 +130,7 @@ void RouteManager::initialize() {
 		window.clear();
 		window.draw(sprite);
 
-		if (!labels.empty()) {
-			for (const auto& label : labels) {
-				window.draw(label);
-			}
-		}
+		
 		if (!lines.empty()) {
 			// Si hay puntos en lines, se dibujan como una línea continua conectada entre ellos usando sf::LinesStrip.
 			// sf::LinesStrip dibuja una serie de vértices conectados, formando una línea desde el primer punto hasta el último.
@@ -144,6 +140,11 @@ void RouteManager::initialize() {
 		if (!circles.empty()) {
 			for (const auto& circles : circles) {
 				window.draw(circles);
+			}
+		}
+		if (!labels.empty()) {
+			for (const auto& label : labels) {
+				window.draw(label);
 			}
 		}
 
@@ -214,7 +215,7 @@ void RouteManager::getText(sf::Event& event) {
 			std::cout << "Texto ingresado: " << inputText << std::endl;
 			sf::Vector2f position = circles[circles.size() - 1].getPosition();
 			label.setString(inputText);
-			label.setPosition(sf::Vector2f(position.x, position.y));
+			label.setPosition(sf::Vector2f(position.x+RADIUS, position.y+RADIUS));
 
 			labels.push_back(label);
 			inputText.clear();
@@ -262,6 +263,7 @@ void RouteManager::loadRoute(string& routeName) {
 			circle.setPosition(sf::Vector2f(current->getX(), current->getY()));
 			circles.push_back(circle);
 			lines.push_back(sf::Vertex(sf::Vector2f(current->getX(), current->getY()), COLOR_LINE));
+			label.setPosition(sf::Vector2f(current->getX()+RADIUS, current->getY()+RADIUS));
 			label.setString(current->getName());
 			labels.push_back(label);
 			current = current->getNext();

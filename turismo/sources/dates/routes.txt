@@ -9,3 +9,8 @@ Point: Perez,244,115
 Point: ciudad neily,227,170
 Point: canoas,332,200
 EndRoute
+Route: roble-sanJose
+Point: roble,336,203
+Point: Puntarenas,374,235
+Point: sanJose,384,285
+EndRoute

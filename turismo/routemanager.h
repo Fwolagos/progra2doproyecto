@@ -17,7 +17,7 @@
 #define COLOR_TEXT sf::Color::Black
 #define RADIUS 5
 #define CHARACTER_SIZE 12
-#define OUTLINETHICKNESS 0.2f
+#define OUTLINETHICKNESS 0.4f
 #define TEXBOX_WIDTH 220
 #define TEXBOX_HEIGHT 580
 #define PATH_FILE "sources/dates/routes.txt"
