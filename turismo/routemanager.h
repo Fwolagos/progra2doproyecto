@@ -52,5 +52,6 @@ public:
 	void loadRoute(string&);
 	void importDates();
 	void exportToFile();
+	vector<sf::Vertex> generateCurve(const sf::Vector2f&, const sf::Vector2f&);
 };
 

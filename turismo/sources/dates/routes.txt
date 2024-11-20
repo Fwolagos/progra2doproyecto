@@ -3,3 +3,9 @@ Point: m,205,89
 Point: n,310,161
 Point: 7,314,205
 EndRoute
+Route: sanvito-canoas
+Point: sanvito,208,69
+Point: Perez,244,115
+Point: ciudad neily,227,170
+Point: canoas,332,200
+EndRoute

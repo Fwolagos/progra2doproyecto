@@ -168,13 +168,26 @@ void RouteManager::ressetVectors() {
 
 void RouteManager::drawRoute(sf::RenderWindow& window) {
 
-	sf::Vector2i mousePos = sf::Mouse::getPosition(window);/// esto podria estar dentro de una funcion y nada mas le paso window
-	circle.setPosition(sf::Vector2f(mousePos.x - RADIUS, mousePos.y - RADIUS));
+	sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+	sf::Vector2f currentPoint(mousePos.x, mousePos.y);
+
+	// Dibujar el punto en la pantalla
+	circle.setPosition(currentPoint.x - RADIUS, currentPoint.y - RADIUS);
 	circles.push_back(circle);
-	lines.push_back(sf::Vertex(sf::Vector2f(mousePos.x, mousePos.y), COLOR_LINE));
+
+	// Si ya hay puntos, genera una curva entre el último punto y el nuevo
+	if (!lines.empty()) {
+		sf::Vector2f lastPoint = lines.back().position;
+		vector<sf::Vertex> curve = generateCurve(lastPoint, currentPoint);
+		lines.insert(lines.end(), curve.begin(), curve.end());
+	}
+	else {
+		// Si es el primer punto, simplemente agrégalo a la lista
+		lines.push_back(sf::Vertex(currentPoint, COLOR_LINE));
+	}
+
 	isTextEntered = true;
 	state = 3;
-	return;
 }
 
 void RouteManager::saveRoute() {
@@ -327,6 +340,24 @@ void RouteManager::importDates() {
 	cout << "Datos cargados desde " << PATH_FILE << endl;
 }
 
+vector<sf::Vertex> RouteManager::generateCurve(const sf::Vector2f& start, const sf::Vector2f& end) {
+	vector<sf::Vertex> curve;
+
+	// Generar un punto de control intermedio
+	sf::Vector2f control = (start + end) / 2.0f; // Punto medio
+	float offset = 50.0f; // Ajusta este valor para controlar la curvatura
+	control.x += static_cast<float>(rand() % static_cast<int>(offset * 2)) - offset;
+	control.y += static_cast<float>(rand() % static_cast<int>(offset * 2)) - offset;
+
+	// Generar puntos de la curva usando interpolación cuadrática
+	for (float t = 0; t <= 1; t += 0.01f) {
+		float u = 1 - t;
+		sf::Vector2f point = (u * u) * start + (2 * u * t) * control + (t * t) * end;
+		curve.push_back(sf::Vertex(point, COLOR_LINE));
+	}
+
+	return curve;
+}
 
 
 
