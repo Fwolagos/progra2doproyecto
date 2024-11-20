@@ -25,5 +25,6 @@ public:///Esto es lo unico publico
 	void renameRoute();
 	void addRoute(Route*);
 	void displayRoutes();
+	Route& getHead();
 };
 #endif

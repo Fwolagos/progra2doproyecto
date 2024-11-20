@@ -108,6 +108,9 @@ void RouteList::renameRoute() {
 }
 
 
+Route& RouteList::getHead() {
+	return*head;
+}
 
 
 
